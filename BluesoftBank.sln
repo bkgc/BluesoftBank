@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BluesoftBank.Server", "BluesoftBank.Server\BluesoftBank.Server.csproj", "{6DDAC2A6-F1DB-4EBF-9B4A-A0520E6C4E8A}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "bluesoftbank.client", "bluesoftbank.client\bluesoftbank.client.esproj", "{546C7716-1780-40DA-BC8E-E3496BB93648}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6DDAC2A6-F1DB-4EBF-9B4A-A0520E6C4E8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DDAC2A6-F1DB-4EBF-9B4A-A0520E6C4E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DDAC2A6-F1DB-4EBF-9B4A-A0520E6C4E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DDAC2A6-F1DB-4EBF-9B4A-A0520E6C4E8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{546C7716-1780-40DA-BC8E-E3496BB93648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{546C7716-1780-40DA-BC8E-E3496BB93648}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{546C7716-1780-40DA-BC8E-E3496BB93648}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{546C7716-1780-40DA-BC8E-E3496BB93648}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{546C7716-1780-40DA-BC8E-E3496BB93648}.Release|Any CPU.Build.0 = Release|Any CPU
+		{546C7716-1780-40DA-BC8E-E3496BB93648}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3654F2B4-7883-4B97-B8C5-047445CB4691}
+	EndGlobalSection
+EndGlobal
