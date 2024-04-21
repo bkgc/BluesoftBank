@@ -10,7 +10,8 @@ namespace MongoDbApi.Repositories
     public interface ICuentaCollection
     {
         Task InsertCuenta(Cuenta cuenta);
-        Task UpdateCuenta(Cuenta cuenta);
+        Task UpdateCuenta(UpdateCuentaModel cuenta,string id);
+        Task UpdateCuentaMoney(Cuenta cuenta);
         Task DeleteCuenta(string id);
         Task<List<Cuenta>> GetAllCuenta();
         Task<Cuenta> GetCuentaById(string id);

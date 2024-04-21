@@ -20,7 +20,7 @@ namespace MongoDbApi.Repositories
         }
         public async Task DeleteCuenta(string id)
         {
-            var filter = Builders<Cuenta>.Filter.Eq(s=>s.Id,new ObjectId(id));
+            var filter = Builders<Cuenta>.Filter.Eq(s=>s.Id,id);
             await _cuentas.DeleteOneAsync(filter);
         }
 
@@ -60,11 +60,26 @@ namespace MongoDbApi.Repositories
             await _cuentas.InsertOneAsync(cuenta);
         }
 
-        public async Task UpdateCuenta(Cuenta cuenta)
+        public async Task UpdateCuenta(UpdateCuentaModel cuenta,string id)
         {
-            var filter = Builders<Cuenta>
-                .Filter
-                .Eq(s => s.Id, cuenta.Id);
+            var filter = Builders<Cuenta>.Filter.Eq(s => s.Id, id);
+            var cuentaExistente = await _cuentas.Find(filter).FirstOrDefaultAsync();
+
+            if (cuentaExistente == null)
+            {
+                return;
+            }
+
+            cuentaExistente.city = cuenta.city;
+            cuentaExistente.name = cuenta.name;
+            cuentaExistente.lastName = cuenta.lastName;
+            cuentaExistente.email = cuenta.email;
+
+            await _cuentas.ReplaceOneAsync(filter, cuentaExistente);
+        }
+        public async Task UpdateCuentaMoney(Cuenta cuenta)
+        {
+            var filter = Builders<Cuenta>.Filter.Eq(s => s.Id, cuenta.Id);
             await _cuentas.ReplaceOneAsync(filter, cuenta);
         }
     }

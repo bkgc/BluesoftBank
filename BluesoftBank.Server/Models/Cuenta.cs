@@ -10,8 +10,8 @@ namespace MongoDbApi.Models
     public abstract class Cuenta
     {
         [BsonId]
-        //[BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
         public string tipo { get; set; }
         public string NumeroCuenta { get; set; }
         public decimal Saldo { get; protected set; }
@@ -109,5 +109,11 @@ namespace MongoDbApi.Models
         Consignacion,
         Retiro
     }
-
+    public class UpdateCuentaModel
+    {
+        public string city { get; set; }
+        public string name { get; set; }
+        public string lastName { get; set; }
+        public string email { get; set; }
+    }
 }

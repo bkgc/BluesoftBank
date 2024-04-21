@@ -1,10 +1,12 @@
-import {   Button, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
+import {    Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
 import axios from "axios";
 import {  useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import DeleteAccount from "./DeleteAccount";
+import EditAccount from "./EditAccount";
 interface Cuenta {
-    _id: string;
+    id: string;
     tipo: string;
     saldo: number;
     city: string;
@@ -48,20 +50,25 @@ const GetAllCuentasPage = () => {
                                     <TableCell>Saldo</TableCell>
                                     <TableCell>Ciudad</TableCell>
                                     <TableCell>Nombres</TableCell>
-                                    <TableCell>Apellidos</TableCell>
-                                    <TableCell>Opciones</TableCell>
+                                        <TableCell>Apellidos</TableCell>
+                                        <TableCell>
+                                            <Typography align="center">
+                                                Opciones
+                                            </Typography>
+                                        </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {cuentas.map((cuenta) => (
-                                    <TableRow key={cuenta._id}>
+                                    <TableRow key={cuenta.id}>
                                         <TableCell>{cuenta.tipo}</TableCell>
                                         <TableCell>{cuenta.saldo}</TableCell>
                                         <TableCell>{cuenta.city}</TableCell>
                                         <TableCell>{cuenta.name}</TableCell>
                                         <TableCell>{cuenta.lastName}</TableCell>
                                         <TableCell>
-                                            <Button>as</Button>
+                                            <DeleteAccount id={cuenta.id} />
+                                            <EditAccount id={ cuenta.id} />
                                         </TableCell>
                                     </TableRow>
                                 ))}

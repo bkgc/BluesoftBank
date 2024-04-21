@@ -54,7 +54,7 @@ namespace MongoDbApi.Controllers
             }
 
             cuenta.Consignar(valor);
-            await db.UpdateCuenta( cuenta);
+            await db.UpdateCuentaMoney( cuenta);
 
             return NoContent();
         }
@@ -68,7 +68,7 @@ namespace MongoDbApi.Controllers
                 return NotFound();
             }
             cuenta.Retirar(valor);
-            await db.UpdateCuenta(cuenta);
+            await db.UpdateCuentaMoney(cuenta);
 
             return NoContent();
         }
@@ -118,7 +118,7 @@ namespace MongoDbApi.Controllers
         [HttpGet("listadotransacciones/{year}/{month}")]
         public async Task<IActionResult> ListarClientesTransacciones(int year, int month)
         {
-            var clientesTransacciones = new List<Cuenta>();
+            var clientesTransacciones = new List<Tuple<Cuenta, int>>();
 
             // Obtener todas las cuentas
             var cuentas = await db.GetAllCuenta();
@@ -128,11 +128,16 @@ namespace MongoDbApi.Controllers
                 var movimientosMes = cuenta.movimientos.Where(m => m.Fecha.Year == year && m.Fecha.Month == month).ToList();
 
                 int numeroTransacciones = movimientosMes.Count;
-                clientesTransacciones.Add(cuenta);
+                clientesTransacciones.Add(new Tuple<Cuenta, int>(cuenta, numeroTransacciones));
             }
-            clientesTransacciones = clientesTransacciones.OrderByDescending(c => c.movimientos).ToList();
 
-            return Ok(clientesTransacciones);
+            // Ordenar la lista de clientes por el número de transacciones en orden descendente
+            clientesTransacciones = clientesTransacciones.OrderByDescending(tuple => tuple.Item2).ToList();
+
+            // Extraer solo las cuentas ordenadas
+            var cuentasOrdenadas = clientesTransacciones.Select(tuple => tuple.Item1).ToList();
+
+            return Ok(cuentasOrdenadas);
         }
         [HttpGet("retirosfuera/{ciudadOrigen}")]
         public async Task<IActionResult> ListarClientesRetirosFuera(string ciudadOrigen)
@@ -144,7 +149,7 @@ namespace MongoDbApi.Controllers
             {
                 var retirosFuera = cuenta.movimientos.Where(m => m.Tipo == TipoMovimiento.Retiro && cuenta.city != ciudadOrigen).ToList();
                 decimal totalRetiros = retirosFuera.Sum(m => m.Monto);
-                if (totalRetiros > 1000000)
+                if (totalRetiros >= 1000000)
                 {
                     clientesRetirosFuera.Add(cuenta);
                 }
@@ -153,14 +158,13 @@ namespace MongoDbApi.Controllers
             return Ok(clientesRetirosFuera);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCuenta([FromBody] Cuenta cuenta,string id)
+        public async Task<IActionResult> UpdateCuenta([FromBody] UpdateCuentaModel cuenta,string id)
         {
             if (cuenta == null)
             {
                 return BadRequest();
             }
-            cuenta.Id=new MongoDB.Bson.ObjectId(id);
-            await db.UpdateCuenta(cuenta);
+            await db.UpdateCuenta(cuenta,id);
             return Created("Created", true);
         }
         [HttpDelete] 
