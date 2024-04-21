@@ -1,9 +1,8 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import axios from "axios";
 import React from "react"
 import {  toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
-import DeleteIcon from '@mui/icons-material/Delete';
 const DeleteAccount: React.FC<{ id: string }> = ({id }) => {
     const DeleteAccount = async () => {
         try {
@@ -19,7 +18,7 @@ const DeleteAccount: React.FC<{ id: string }> = ({id }) => {
     };
     return (
         <Button onClick={DeleteAccount}>
-            <DeleteIcon style={{ color:"#ff3808" }} />
+            <Typography>Eliminar</Typography>
         </Button>)
 }
 export default DeleteAccount

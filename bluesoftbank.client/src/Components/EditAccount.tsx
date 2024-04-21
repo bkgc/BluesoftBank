@@ -3,7 +3,6 @@ import axios from "axios";
 import React, { ChangeEvent, useState } from "react"
 import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
-import EditIcon from '@mui/icons-material/Edit';
 const EditAccount: React.FC<{ id: string }> = ({ id }) => {
     const [state, setState] = useState<boolean>(false);
     const [formData, setFormData] = useState({
@@ -64,7 +63,7 @@ const EditAccount: React.FC<{ id: string }> = ({ id }) => {
     };
     return (<>
         <Button onClick={GetAccount}>
-            <EditIcon style={{ color: "#36cc5d" }} />
+            <Typography>Editar</Typography>
         </Button>
         <Dialog onClose={handleClose} open={state}>
             <Grid item xs={12}>

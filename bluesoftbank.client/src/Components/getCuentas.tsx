@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import DeleteAccount from "./DeleteAccount";
 import EditAccount from "./EditAccount";
+import BasicMenu from "./GroupButtons";
 interface Cuenta {
     id: string;
     tipo: string;
@@ -67,8 +68,7 @@ const GetAllCuentasPage = () => {
                                         <TableCell>{cuenta.name}</TableCell>
                                         <TableCell>{cuenta.lastName}</TableCell>
                                         <TableCell>
-                                            <DeleteAccount id={cuenta.id} />
-                                            <EditAccount id={ cuenta.id} />
+                                            <BasicMenu id={cuenta.id} />
                                         </TableCell>
                                     </TableRow>
                                 ))}
