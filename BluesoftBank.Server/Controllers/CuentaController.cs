@@ -30,6 +30,7 @@ namespace MongoDbApi.Controllers
         [HttpPost("ahorros")]
         public async Task<ActionResult<Cuenta>> CrearCuentaAhorros(CuentaAhorros cuenta)
         {
+            cuenta.tipo = "ahorro";
             await db.InsertCuenta(cuenta);
             return Ok(cuenta);
         }
@@ -37,6 +38,7 @@ namespace MongoDbApi.Controllers
         [HttpPost("corriente")]
         public async Task<ActionResult<Cuenta>> CrearCuentaCorriente(CuentaCorriente cuenta)
         {
+            cuenta.tipo = "corriente";
             await db.InsertCuenta(cuenta);
             return Ok(cuenta);
         }
@@ -65,16 +67,91 @@ namespace MongoDbApi.Controllers
             {
                 return NotFound();
             }
-            if (cuenta.Saldo - valor >= 0)
-            {
-                cuenta.Consignar(valor);
-                await db.UpdateCuenta(cuenta);
+            cuenta.Retirar(valor);
+            await db.UpdateCuenta(cuenta);
 
-                return NoContent();
-            }
-            return NotFound();
+            return NoContent();
         }
 
+        [HttpGet("lastMovements/{id}")]
+        public async Task<IActionResult> ObtenerUltimosMovimientos(string id, int cantidad)
+        {
+            var cuenta = await db.GetCuentaById(id);
+
+            if (cuenta == null)
+            {
+                return NotFound();
+            }
+
+            if (cuenta.tipo=="ahorro")
+            {
+                var ultimosMovimientos =cuenta.ObtenerUltimosMovimientos(cantidad);
+                return Ok(ultimosMovimientos);
+            }
+            else
+            {
+                return BadRequest("La cuenta especificada no es una cuenta de ahorros.");
+            }
+        }
+
+        [HttpGet("extracto/{id}")]
+        public async Task<IActionResult> GenerarExtractoMensual(string id, int year, int month)
+        {
+            var cuenta = await db.GetCuentaById(id);
+
+            if (cuenta == null)
+            {
+                return NotFound();
+            }
+
+            if (cuenta.tipo=="ahorro")
+            {
+                var extractoMensual = cuenta.GenerarExtractoMensual(year, month);
+                return Ok(extractoMensual);
+            }
+            else
+            {
+                return BadRequest("La cuenta especificada no es una cuenta de ahorros.");
+            }
+        }
+
+        [HttpGet("listadotransacciones/{year}/{month}")]
+        public async Task<IActionResult> ListarClientesTransacciones(int year, int month)
+        {
+            var clientesTransacciones = new List<Cuenta>();
+
+            // Obtener todas las cuentas
+            var cuentas = await db.GetAllCuenta();
+
+            foreach (var cuenta in cuentas)
+            {
+                var movimientosMes = cuenta.movimientos.Where(m => m.Fecha.Year == year && m.Fecha.Month == month).ToList();
+
+                int numeroTransacciones = movimientosMes.Count;
+                clientesTransacciones.Add(cuenta);
+            }
+            clientesTransacciones = clientesTransacciones.OrderByDescending(c => c.movimientos).ToList();
+
+            return Ok(clientesTransacciones);
+        }
+        [HttpGet("retirosfuera/{ciudadOrigen}")]
+        public async Task<IActionResult> ListarClientesRetirosFuera(string ciudadOrigen)
+        {
+            var clientesRetirosFuera = new List<Cuenta>();
+            var cuentas =await db.GetAllCuenta();
+
+            foreach (var cuenta in cuentas)
+            {
+                var retirosFuera = cuenta.movimientos.Where(m => m.Tipo == TipoMovimiento.Retiro && cuenta.city != ciudadOrigen).ToList();
+                decimal totalRetiros = retirosFuera.Sum(m => m.Monto);
+                if (totalRetiros > 1000000)
+                {
+                    clientesRetirosFuera.Add(cuenta);
+                }
+            }
+
+            return Ok(clientesRetirosFuera);
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCuenta([FromBody] Cuenta cuenta,string id)
         {

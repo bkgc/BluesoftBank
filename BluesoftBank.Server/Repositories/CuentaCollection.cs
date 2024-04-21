@@ -26,7 +26,27 @@ namespace MongoDbApi.Repositories
 
         public async Task<List<Cuenta>> GetAllCuenta()
         {
-            return await _cuentas.FindAsync(new BsonDocument()).Result.ToListAsync();
+            //return await _cuentas.FindAsync(new BsonDocument()).Result.ToListAsync();
+            var cuentasAhorros = await _cuentas.FindAsync<CuentaAhorros>(new BsonDocument()).Result.ToListAsync();
+            var cuentasCorriente = await _cuentas.FindAsync<CuentaCorriente>(new BsonDocument()).Result.ToListAsync();
+
+            var todasLasCuentas = new List<Cuenta>();
+            foreach (CuentaAhorros cuenta in cuentasAhorros) 
+            {
+                if (cuenta.tipo == "ahorro")
+                {
+                    todasLasCuentas.Add(cuenta);
+                }
+            }
+            foreach (CuentaCorriente cuenta in cuentasCorriente)
+            {
+                if (cuenta.tipo == "corriente")
+                {
+                    todasLasCuentas.Add(cuenta);
+                }
+            }
+
+            return todasLasCuentas;
         }
 
         public async Task<Cuenta> GetCuentaById(string id)

@@ -3,7 +3,7 @@ import axios from "axios";
 import { ChangeEvent, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
-const AhorroPage = () => {
+const CorrientePage = () => {
     const [state, setState] = useState<boolean>(false);
     const [formData, setFormData] = useState({
         city: '',
@@ -33,7 +33,7 @@ const AhorroPage = () => {
 
     const PostAccount = async () => {
         try {
-            const response = await axios.post('https://localhost:7222/api/Cuenta/ahorros', {
+            const response = await axios.post('https://localhost:7222/api/Cuenta/corriente', {
                 city: formData.city,
                 name: formData.name,
                 lastName: formData.lastName,
@@ -55,13 +55,13 @@ const AhorroPage = () => {
             <Button onClick={handleOpen}
                 style={{ backgroundColor: "#00afb9", borderRadius: 10 }}>
                 <Typography color="whitesmoke">
-                Crear cuenta de ahorro
+                Crear cuenta corriente
                 </Typography>
             </Button>
             <Dialog onClose={handleClose} open={state}>
                 <Grid item xs={12}>
                     <Typography align="center" variant="h5" color="#009aff" style={{ margin: 10, marginTop:20 }}>
-                    Nueva Cuenta de Ahorro
+                    Nueva Cuenta corriente
                     </Typography>
                 </Grid>
                 <Grid container spacing={2} style={{ width: "100%", padding: 20 }}>
@@ -124,4 +124,4 @@ const AhorroPage = () => {
             </Dialog>
         </>)
 }
-export default AhorroPage
+export default CorrientePage
