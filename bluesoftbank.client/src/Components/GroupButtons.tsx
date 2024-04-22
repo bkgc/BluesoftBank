@@ -8,7 +8,8 @@ import DetailsAccount from './DetailstAccount';
 import ConsignarAccount from './Consignar';
 import RetirarAccount from './Retirar';
 import LastMovementAccount from './LastMovement';
-
+import ExtractoAccount from './Extracto';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 const BasicMenu: React.FC<{ id: string, isAhorro: boolean }> = ({ id, isAhorro }) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -28,7 +29,7 @@ const BasicMenu: React.FC<{ id: string, isAhorro: boolean }> = ({ id, isAhorro }
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
             >
-                Opciones
+                <MoreVertIcon/>
             </Button>
             <Menu
                 id="basic-menu"
@@ -48,7 +49,11 @@ const BasicMenu: React.FC<{ id: string, isAhorro: boolean }> = ({ id, isAhorro }
                 {isAhorro ? (
                     <MenuItem>
                         <LastMovementAccount id={id} />
-                    </MenuItem>): (<></>) }
+                    </MenuItem>) : (<></>)}
+                {isAhorro ? (
+                    <MenuItem>
+                        <ExtractoAccount id={id} />
+                    </MenuItem>) : (<></>)}
                 <MenuItem>
                     <EditAccount id={id} />
                 </MenuItem>

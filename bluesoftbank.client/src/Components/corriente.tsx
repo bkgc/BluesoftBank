@@ -51,14 +51,15 @@ const CorrientePage = () => {
     };
     return (
         <>
-            <ToastContainer />
+            
             <Button onClick={handleOpen}
-                style={{ backgroundColor: "#00afb9", borderRadius: 10 }}>
+                style={{ backgroundColor: "#00afb9", borderRadius: 10, marginRight:20 }}>
                 <Typography color="whitesmoke">
                 Crear cuenta corriente
                 </Typography>
             </Button>
             <Dialog onClose={handleClose} open={state}>
+                <ToastContainer />
                 <Grid item xs={12}>
                     <Typography align="center" variant="h5" color="#009aff" style={{ margin: 10, marginTop:20 }}>
                     Nueva Cuenta corriente

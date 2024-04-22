@@ -1,9 +1,10 @@
 import {    Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
 import axios from "axios";
-import {  useEffect, useState } from "react"
+import {  useContext, useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import BasicMenu from "./GroupButtons";
+import { UIContext } from "../Context";
 interface Cuenta {
     id: string;
     tipo: string;
@@ -14,6 +15,7 @@ interface Cuenta {
     email: string;
 }
 const GetAllCuentasPage = () => {
+    const { getData, closeData } = useContext(UIContext)
     const [cuentas, setCuentas] = useState < Cuenta[]>([]);
     const GetAllAccount = async () => {
         try {
@@ -28,16 +30,19 @@ const GetAllCuentasPage = () => {
     };
     useEffect(() => {
         GetAllAccount()
-    },[])
+    }, [])
+    useEffect(() => {
+        if (getData) {
+            GetAllAccount()
+            closeData()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getData, closeData])
+
     return (
         <>
             <ToastContainer />
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Typography align="center">
-                        Cuentas
-                    </Typography>
-                </Grid>
                 <Grid item xs={ 12}>
                     {cuentas.length === 0 ? (
                         <Typography align="center">Cargando...</Typography>

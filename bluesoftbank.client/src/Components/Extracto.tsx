@@ -1,17 +1,19 @@
-import { Button, Dialog, Grid, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Button, Dialog, Grid, Table, TableBody, TableCell, TableHead, TableRow,  TextField,  Typography } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react"
+import React, { ChangeEvent, useState } from "react"
 import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 
-interface Movement {
+interface Extracto {
     monto: number
     fecha: Date
     tipo: number
 }
 const ExtractoAccount: React.FC<{ id: string }> = ({ id }) => {
     const [state, setState] = useState<boolean>(false);
-    const [movement, setMovement] = useState<Movement[]>([])
+    const [movement, setMovement] = useState<Extracto[]>([])
+    const [year, setYear] = useState<string>("2024")
+    const [month, setMonth] = useState<string>("4")
     const [formData, setFormData] = useState({
         name: '',
         lastName: ''
@@ -22,21 +24,27 @@ const ExtractoAccount: React.FC<{ id: string }> = ({ id }) => {
     const handleOpen = () => {
         setState(true)
     }
+    const handleChangeMonth = (e: ChangeEvent<HTMLInputElement>) => {
+        setMonth(e.target.value)
+    };
+    const handleChangeYear = (e: ChangeEvent<HTMLInputElement>) => {
+        setYear(e.target.value)
+    };
     const GetAccount = async () => {
         try {
             const response = await axios.get(`https://localhost:7222/api/Cuenta/${id}`);
             setFormData(response.data)
             console.log('Respuesta del servidor:', response.data);
-            GetMovementAccount()
+            GetExtractoAccount()
             // Aquí puedes manejar la respuesta del servidor según sea necesario
         } catch (error) {
             console.error('Error al enviar la solicitud:', error);
             toast.error('errror en la solicitud')
         }
     }
-    const GetMovementAccount = async () => {
+    const GetExtractoAccount = async () => {
         try {
-            const response = await axios.get<Movement[]>(`https://localhost:7222/api/Cuenta/lastMovements/${id}?cantidad=10`);
+            const response = await axios.get<Extracto[]>(`https://localhost:7222/api/Cuenta/extracto/${id}?year=${parseInt(year)}&month=${parseInt(month)}`);
             setMovement(response.data)
             console.log('Respuesta del servidor:', response.data);
             toast("Ultimos Movimientos")
@@ -49,13 +57,38 @@ const ExtractoAccount: React.FC<{ id: string }> = ({ id }) => {
     }
     return (<>
         <Button onClick={GetAccount}>
-            <Typography>Ult. Movi.</Typography>
+            <Typography>Extracto</Typography>
         </Button>
         <Dialog onClose={handleClose} open={state}>
             <Grid item xs={12}>
-                <Typography align="center" variant="h5" color="#009aff" style={{ margin: 10, marginTop: 20 }}>
-                    Ultimos 10 movimientos
+                <Typography align="center" variant="h5" color="#009aff" style={{ margin: 10, marginTop: 40 }}>
+                    Extracto del mes
                 </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <TextField
+                    style={{ margin:10 }}
+                    id="year"
+                    name="year"
+                    label="Year"
+                    value={year}
+                    onChange={handleChangeYear}>
+                </TextField>
+                
+            </Grid>
+            <Grid item xs={12}>
+                <TextField
+                    style={{ margin: 10 }}
+                    id="month"
+                    name="month"
+                    label="Month"
+                    value={month}
+                    onChange={handleChangeMonth}>
+                </TextField>
+                
+            </Grid>
+            <Grid item xs={12}>
+                <Button onClick={GetExtractoAccount} style={{ margin: 10 }}>Buscar</Button>
             </Grid>
             <Grid container spacing={2} style={{ width: "100%", padding: 20 }}>
                 <Grid item xs={12}>

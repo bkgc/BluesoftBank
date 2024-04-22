@@ -1,9 +1,11 @@
 import { Button, Dialog, Grid, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent,  useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+/*import { UIContext } from "../Context";*/
 const AhorroPage = () => {
+    /*const { openData } = useContext(UIContext)*/
     const [state, setState] = useState<boolean>(false);
     const [formData, setFormData] = useState({
         city: '',
@@ -41,8 +43,9 @@ const AhorroPage = () => {
             });
             console.log('Respuesta del servidor:', response.data);
             toast(response.data)
+            /*openData()*/
             handleClose();
-            // Aquí puedes manejar la respuesta del servidor según sea necesario
+            
         } catch (error) {
             console.error('Error al enviar la solicitud:', error);
             toast.error('errror en la solicitud')
@@ -51,14 +54,14 @@ const AhorroPage = () => {
     };
     return (
         <>
-            <ToastContainer />
             <Button onClick={handleOpen}
-                style={{ backgroundColor: "#00afb9", borderRadius: 10 }}>
+                style={{ backgroundColor: "#00afb9", borderRadius: 10, marginRight: 20 }}>
                 <Typography color="whitesmoke">
                 Crear cuenta de ahorro
                 </Typography>
             </Button>
             <Dialog onClose={handleClose} open={state}>
+                <ToastContainer />
                 <Grid item xs={12}>
                     <Typography align="center" variant="h5" color="#009aff" style={{ margin: 10, marginTop:20 }}>
                     Nueva Cuenta de Ahorro
