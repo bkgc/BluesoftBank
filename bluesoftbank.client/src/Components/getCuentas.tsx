@@ -3,8 +3,6 @@ import axios from "axios";
 import {  useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
-import DeleteAccount from "./DeleteAccount";
-import EditAccount from "./EditAccount";
 import BasicMenu from "./GroupButtons";
 interface Cuenta {
     id: string;
@@ -68,7 +66,7 @@ const GetAllCuentasPage = () => {
                                         <TableCell>{cuenta.name}</TableCell>
                                         <TableCell>{cuenta.lastName}</TableCell>
                                         <TableCell>
-                                            <BasicMenu id={cuenta.id} />
+                                            <BasicMenu id={cuenta.id} isAhorro={cuenta.tipo=="ahorro"?true:false} />
                                         </TableCell>
                                     </TableRow>
                                 ))}

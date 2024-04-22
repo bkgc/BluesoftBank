@@ -44,7 +44,7 @@ namespace MongoDbApi.Controllers
         }
 
         [HttpPost("consignar/{id}")]
-        public async Task<IActionResult> Consignar(string id, [FromBody] decimal valor)
+        public async Task<IActionResult> Consignar(string id, [FromBody] Saldo saldo)
         {
             var cuenta = await db.GetCuentaById(id);
 
@@ -53,13 +53,13 @@ namespace MongoDbApi.Controllers
                 return NotFound();
             }
 
-            cuenta.Consignar(valor);
+            cuenta.Consignar(saldo.saldo);
             await db.UpdateCuentaMoney( cuenta);
 
             return NoContent();
         }
         [HttpPost("retirar/{id}")]
-        public async Task<IActionResult> Retirar(string id, [FromBody] decimal valor)
+        public async Task<IActionResult> Retirar(string id, [FromBody] Saldo saldo)
         {
             var cuenta = await db.GetCuentaById(id);
 
@@ -67,7 +67,7 @@ namespace MongoDbApi.Controllers
             {
                 return NotFound();
             }
-            cuenta.Retirar(valor);
+            cuenta.Retirar(saldo.saldo);
             await db.UpdateCuentaMoney(cuenta);
 
             return NoContent();
@@ -173,5 +173,11 @@ namespace MongoDbApi.Controllers
             await db.DeleteCuenta(id);
             return NoContent();
         }
+    }
+
+
+    public class Saldo
+    {
+        public decimal saldo { get; set; }
     }
 }

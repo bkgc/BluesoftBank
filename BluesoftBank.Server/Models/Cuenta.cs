@@ -27,6 +27,7 @@ namespace MongoDbApi.Models
 
         public Cuenta()
         {
+            Id = ObjectId.GenerateNewId().ToString();
             NumeroCuenta = Guid.NewGuid().ToString();
             FechaCreacion = DateTime.UtcNow;
             movimientos = new List<Movimiento>();
